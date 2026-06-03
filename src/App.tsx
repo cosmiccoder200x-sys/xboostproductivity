@@ -11,6 +11,9 @@ import CollectionsPage from "@/pages/CollectionsPage";
 import FolderDetailPage from "@/pages/FolderDetailPage";
 import SearchPage from "@/pages/SearchPage";
 import ProfilePage from "@/pages/ProfilePage";
+import QueuePage from "@/pages/QueuePage";
+import ReviewPage from "@/pages/ReviewPage";
+import ItemDetailPage from "@/pages/ItemDetailPage";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -25,8 +28,11 @@ const App = () => (
           <Routes>
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/" element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
+            <Route path="/queue" element={<ProtectedRoute><QueuePage /></ProtectedRoute>} />
+            <Route path="/review" element={<ProtectedRoute><ReviewPage /></ProtectedRoute>} />
             <Route path="/collections" element={<ProtectedRoute><CollectionsPage /></ProtectedRoute>} />
             <Route path="/collections/:id" element={<ProtectedRoute><FolderDetailPage /></ProtectedRoute>} />
+            <Route path="/items/:id" element={<ProtectedRoute><ItemDetailPage /></ProtectedRoute>} />
             <Route path="/search" element={<ProtectedRoute><SearchPage /></ProtectedRoute>} />
             <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
