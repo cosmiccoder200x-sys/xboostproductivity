@@ -1,11 +1,11 @@
-import { Home, Folder, Search, User } from 'lucide-react';
+import { Home, Folder, Inbox, BarChart3, User } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
-import { cn } from '@/lib/utils';
 
 const navItems = [
   { to: '/', icon: Home, label: 'Home' },
-  { to: '/collections', icon: Folder, label: 'Collections' },
-  { to: '/search', icon: Search, label: 'Search' },
+  { to: '/queue', icon: Inbox, label: 'Queue' },
+  { to: '/collections', icon: Folder, label: 'Folders' },
+  { to: '/review', icon: BarChart3, label: 'Review' },
   { to: '/profile', icon: User, label: 'Profile' },
 ];
 
@@ -18,11 +18,11 @@ export default function BottomNav() {
             key={item.to}
             to={item.to}
             end={item.to === '/'}
-            className="flex flex-col items-center justify-center touch-target px-4 py-2 text-muted-foreground transition-colors"
+            className="flex flex-col items-center justify-center touch-target px-2 py-2 text-muted-foreground transition-colors"
             activeClassName="text-primary"
           >
             <item.icon className="h-5 w-5" />
-            <span className="text-xs mt-1 font-medium">{item.label}</span>
+            <span className="text-[10px] mt-1 font-medium">{item.label}</span>
           </NavLink>
         ))}
       </div>
