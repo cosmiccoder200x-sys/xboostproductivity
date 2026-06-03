@@ -81,13 +81,18 @@ export type Database = {
       }
       items: {
         Row: {
+          completed_at: string | null
           created_at: string
           description: string | null
           folder_id: string | null
+          highlights: Json
           id: string
           is_favorite: boolean | null
           metadata: Json | null
           notes: string | null
+          progress: number
+          queue_bucket: string | null
+          status: string
           thumbnail_url: string | null
           title: string | null
           type: string | null
@@ -95,13 +100,18 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          completed_at?: string | null
           created_at?: string
           description?: string | null
           folder_id?: string | null
+          highlights?: Json
           id?: string
           is_favorite?: boolean | null
           metadata?: Json | null
           notes?: string | null
+          progress?: number
+          queue_bucket?: string | null
+          status?: string
           thumbnail_url?: string | null
           title?: string | null
           type?: string | null
@@ -109,13 +119,18 @@ export type Database = {
           user_id: string
         }
         Update: {
+          completed_at?: string | null
           created_at?: string
           description?: string | null
           folder_id?: string | null
+          highlights?: Json
           id?: string
           is_favorite?: boolean | null
           metadata?: Json | null
           notes?: string | null
+          progress?: number
+          queue_bucket?: string | null
+          status?: string
           thumbnail_url?: string | null
           title?: string | null
           type?: string | null
@@ -176,6 +191,39 @@ export type Database = {
           created_at?: string
           id?: string
           name?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_activity: {
+        Row: {
+          activity_date: string
+          created_at: string
+          id: string
+          items_completed: number
+          items_read: number
+          items_saved: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          activity_date?: string
+          created_at?: string
+          id?: string
+          items_completed?: number
+          items_read?: number
+          items_saved?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          activity_date?: string
+          created_at?: string
+          id?: string
+          items_completed?: number
+          items_read?: number
+          items_saved?: number
+          updated_at?: string
           user_id?: string
         }
         Relationships: []
