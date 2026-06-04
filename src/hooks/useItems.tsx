@@ -65,6 +65,7 @@ export function useItems(folderId?: string) {
       return (data || []).map((d: any) => ({
         ...d,
         highlights: Array.isArray(d.highlights) ? d.highlights : [],
+        key_points: Array.isArray(d.key_points) ? d.key_points : [],
       })) as Item[];
     },
     enabled: !!user,
