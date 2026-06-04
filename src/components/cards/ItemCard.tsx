@@ -10,6 +10,7 @@ import {
   DropdownMenuLabel,
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
+import { safeHref } from '@/lib/url';
 import { QueueBucket, ItemStatus } from '@/hooks/useItems';
 
 interface ItemCardProps {
@@ -150,7 +151,7 @@ export default function ItemCard({
                 </DropdownMenuContent>
               </DropdownMenu>
             )}
-            <a href={url} target="_blank" rel="noopener noreferrer" className="inline-flex">
+            <a href={safeHref(url)} target="_blank" rel="noopener noreferrer" className="inline-flex">
               <Button variant="ghost" size="icon" className="h-8 w-8" aria-label="Open link">
                 <ExternalLink className="h-4 w-4 text-muted-foreground" />
               </Button>

@@ -1,0 +1,1 @@
+ALTER TABLE public.items ADD CONSTRAINT items_url_protocol CHECK (url ~* '^https?://');

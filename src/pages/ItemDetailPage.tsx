@@ -12,6 +12,7 @@ import {
 import { useItem, useItems, ItemStatus, QueueBucket, Highlight } from '@/hooks/useItems';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import { safeHref } from '@/lib/url';
 
 export default function ItemDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -85,7 +86,7 @@ export default function ItemDetailPage() {
             <Button variant="ghost" size="icon" onClick={() => toggleFavorite({ id: item.id, is_favorite: !item.is_favorite })}>
               <Heart className={cn('h-4 w-4', item.is_favorite && 'fill-destructive text-destructive')} />
             </Button>
-            <a href={item.url} target="_blank" rel="noopener noreferrer">
+            <a href={safeHref(item.url)} target="_blank" rel="noopener noreferrer">
               <Button variant="ghost" size="icon"><ExternalLink className="h-4 w-4" /></Button>
             </a>
             <Button variant="ghost" size="icon" onClick={async () => { await deleteItem(item.id); toast.success('Deleted'); navigate('/'); }}>
@@ -100,7 +101,7 @@ export default function ItemDetailPage() {
 
         <div>
           <h1 className="text-2xl font-semibold text-foreground">{item.title || 'Untitled'}</h1>
-          <a href={item.url} target="_blank" rel="noopener noreferrer" className="text-sm text-primary hover:underline break-all">{item.url}</a>
+          <a href={safeHref(item.url)} target="_blank" rel="noopener noreferrer" className="text-sm text-primary hover:underline break-all">{item.url}</a>
           {item.description && <p className="mt-3 text-sm text-muted-foreground">{item.description}</p>}
         </div>
 

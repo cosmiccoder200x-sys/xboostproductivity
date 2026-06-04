@@ -10,6 +10,7 @@ import { useAddContentModal } from '@/hooks/useAddContentModal';
 import { useFolders } from '@/hooks/useFolders';
 import { useItems } from '@/hooks/useItems';
 import { useToast } from '@/hooks/use-toast';
+import { isSafeHttpUrl } from '@/lib/url';
 
 export default function AddContentModal() {
   const { isOpen, closeModal } = useAddContentModal();
@@ -59,6 +60,15 @@ export default function AddContentModal() {
 
   const handleSubmit = async () => {
     if (!url) return;
+
+    if (!isSafeHttpUrl(url)) {
+      toast({
+        title: 'Invalid URL',
+        description: 'Only http:// and https:// URLs are allowed.',
+        variant: 'destructive',
+      });
+      return;
+    }
     
     try {
       const domain = extractDomain(url);
