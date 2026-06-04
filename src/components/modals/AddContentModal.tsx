@@ -18,6 +18,7 @@ export default function AddContentModal() {
   const { folders } = useFolders();
   const { createItem } = useItems();
   const { toast } = useToast();
+  const queryClient = useQueryClient();
   
   const [url, setUrl] = useState('');
   const [title, setTitle] = useState('');
