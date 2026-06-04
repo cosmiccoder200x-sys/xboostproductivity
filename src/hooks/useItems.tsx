@@ -30,6 +30,9 @@ export interface Item {
   progress: number;
   completed_at: string | null;
   highlights: Highlight[];
+  summary: string | null;
+  key_points: string[];
+  reading_time_minutes: number | null;
 }
 
 interface CreateItemInput {
@@ -62,6 +65,7 @@ export function useItems(folderId?: string) {
       return (data || []).map((d: any) => ({
         ...d,
         highlights: Array.isArray(d.highlights) ? d.highlights : [],
+        key_points: Array.isArray(d.key_points) ? d.key_points : [],
       })) as Item[];
     },
     enabled: !!user,
@@ -194,8 +198,26 @@ export function useItem(id: string | undefined) {
       return {
         ...data,
         highlights: Array.isArray((data as any).highlights) ? (data as any).highlights : [],
+        key_points: Array.isArray((data as any).key_points) ? (data as any).key_points : [],
       } as Item;
     },
     enabled: !!user && !!id,
   });
+}
+
+export async function summarizeAndSaveItem(itemId: string, url: string) {
+  const { data, error } = await supabase.functions.invoke('summarize-link', {
+    body: { url },
+  });
+  if (error) throw error;
+  if (data?.error) throw new Error(data.error);
+  const patch: any = {
+    summary: data.summary ?? null,
+    key_points: data.key_points ?? [],
+    reading_time_minutes: data.reading_time_minutes ?? null,
+  };
+  if (data.title && data.title.length > 0) patch.title = data.title;
+  const { error: upErr } = await supabase.from('items').update(patch).eq('id', itemId);
+  if (upErr) throw upErr;
+  return data;
 }

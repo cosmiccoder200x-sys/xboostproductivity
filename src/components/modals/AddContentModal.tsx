@@ -8,15 +8,17 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useAddContentModal } from '@/hooks/useAddContentModal';
 import { useFolders } from '@/hooks/useFolders';
-import { useItems } from '@/hooks/useItems';
+import { useItems, summarizeAndSaveItem } from '@/hooks/useItems';
 import { useToast } from '@/hooks/use-toast';
 import { isSafeHttpUrl } from '@/lib/url';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function AddContentModal() {
   const { isOpen, closeModal } = useAddContentModal();
   const { folders } = useFolders();
   const { createItem } = useItems();
   const { toast } = useToast();
+  const queryClient = useQueryClient();
   
   const [url, setUrl] = useState('');
   const [title, setTitle] = useState('');
@@ -74,18 +76,36 @@ export default function AddContentModal() {
       const domain = extractDomain(url);
       const isVideo = domain.includes('youtube') || domain.includes('vimeo') || domain.includes('tiktok');
       
-      await createItem({
+      const created = await createItem({
         url,
         title: title || `Content from ${domain}`,
         type: isVideo ? 'video' : 'link',
         folder_id: folderId || null,
         notes,
       });
-      
+
       toast({
         title: 'Link saved!',
-        description: 'Your content has been added successfully.',
+        description: 'Generating AI summary in the background…',
       });
+
+      // Kick off AI summary (non-blocking)
+      if (created?.id) {
+        summarizeAndSaveItem(created.id, url)
+          .then(() => {
+            queryClient.invalidateQueries({ queryKey: ['items'] });
+            queryClient.invalidateQueries({ queryKey: ['item', created.id] });
+            toast({ title: 'AI summary ready', description: 'Open the bookmark to read it.' });
+          })
+          .catch((err) => {
+            console.error('summarize failed', err);
+            toast({
+              title: 'Summary unavailable',
+              description: err?.message || 'Could not generate AI summary.',
+              variant: 'destructive',
+            });
+          });
+      }
       
       // Reset form
       setUrl('');

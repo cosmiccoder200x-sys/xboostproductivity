@@ -9,10 +9,12 @@ import { Slider } from '@/components/ui/slider';
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select';
-import { useItem, useItems, ItemStatus, QueueBucket, Highlight } from '@/hooks/useItems';
+import { useItem, useItems, ItemStatus, QueueBucket, Highlight, summarizeAndSaveItem } from '@/hooks/useItems';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { safeHref } from '@/lib/url';
+import { Sparkles, Clock, Loader2 } from 'lucide-react';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function ItemDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -26,6 +28,23 @@ export default function ItemDetailPage() {
   const [notesDraft, setNotesDraft] = useState<string | null>(null);
   const [highlightText, setHighlightText] = useState('');
   const [highlightNote, setHighlightNote] = useState('');
+  const [summarizing, setSummarizing] = useState(false);
+  const queryClient = useQueryClient();
+
+  const runSummarize = async () => {
+    if (!item) return;
+    setSummarizing(true);
+    try {
+      await summarizeAndSaveItem(item.id, item.url);
+      await queryClient.invalidateQueries({ queryKey: ['item', item.id] });
+      await queryClient.invalidateQueries({ queryKey: ['items'] });
+      toast.success('AI summary ready');
+    } catch (e: any) {
+      toast.error(e?.message || 'Failed to summarize');
+    } finally {
+      setSummarizing(false);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -104,6 +123,48 @@ export default function ItemDetailPage() {
           <a href={safeHref(item.url)} target="_blank" rel="noopener noreferrer" className="text-sm text-primary hover:underline break-all">{item.url}</a>
           {item.description && <p className="mt-3 text-sm text-muted-foreground">{item.description}</p>}
         </div>
+
+        {/* AI Summary */}
+        <section className="bg-card rounded-xl border border-border p-4 space-y-3">
+          <div className="flex items-center justify-between">
+            <h2 className="text-sm font-semibold flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-primary" /> AI Summary
+            </h2>
+            <div className="flex items-center gap-3">
+              {item.reading_time_minutes != null && (
+                <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
+                  <Clock className="h-3 w-3" /> {item.reading_time_minutes} min read
+                </span>
+              )}
+              <Button size="sm" variant="ghost" onClick={runSummarize} disabled={summarizing}>
+                {summarizing ? <Loader2 className="h-4 w-4 animate-spin" /> : (item.summary ? 'Regenerate' : 'Generate')}
+              </Button>
+            </div>
+          </div>
+
+          {item.summary ? (
+            <p className="text-sm text-foreground leading-relaxed">{item.summary}</p>
+          ) : (
+            <p className="text-sm text-muted-foreground">
+              {summarizing ? 'Reading the page and summarizing…' : 'No summary yet. Tap Generate to create one.'}
+            </p>
+          )}
+
+          {item.key_points.length > 0 && (
+            <div className="pt-2 border-t border-border">
+              <h3 className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wide">Key points</h3>
+              <ul className="space-y-1.5">
+                {item.key_points.map((kp, i) => (
+                  <li key={i} className="text-sm text-foreground flex gap-2">
+                    <span className="text-primary mt-0.5">•</span>
+                    <span>{kp}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </section>
+
 
         {/* Progress & Status */}
         <section className="bg-card rounded-xl border border-border p-4 space-y-4">
