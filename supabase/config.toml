@@ -1,1 +1,4 @@
 project_id = "mltwfzzglltaniarqwrs"
+
+[functions.summarize-link]
+verify_jwt = true
