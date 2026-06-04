@@ -28,6 +28,23 @@ export default function ItemDetailPage() {
   const [notesDraft, setNotesDraft] = useState<string | null>(null);
   const [highlightText, setHighlightText] = useState('');
   const [highlightNote, setHighlightNote] = useState('');
+  const [summarizing, setSummarizing] = useState(false);
+  const queryClient = useQueryClient();
+
+  const runSummarize = async () => {
+    if (!item) return;
+    setSummarizing(true);
+    try {
+      await summarizeAndSaveItem(item.id, item.url);
+      await queryClient.invalidateQueries({ queryKey: ['item', item.id] });
+      await queryClient.invalidateQueries({ queryKey: ['items'] });
+      toast.success('AI summary ready');
+    } catch (e: any) {
+      toast.error(e?.message || 'Failed to summarize');
+    } finally {
+      setSummarizing(false);
+    }
+  };
 
   if (isLoading) {
     return (
