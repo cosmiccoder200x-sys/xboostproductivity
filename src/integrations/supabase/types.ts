@@ -88,11 +88,14 @@ export type Database = {
           highlights: Json
           id: string
           is_favorite: boolean | null
+          key_points: Json
           metadata: Json | null
           notes: string | null
           progress: number
           queue_bucket: string | null
+          reading_time_minutes: number | null
           status: string
+          summary: string | null
           thumbnail_url: string | null
           title: string | null
           type: string | null
@@ -107,11 +110,14 @@ export type Database = {
           highlights?: Json
           id?: string
           is_favorite?: boolean | null
+          key_points?: Json
           metadata?: Json | null
           notes?: string | null
           progress?: number
           queue_bucket?: string | null
+          reading_time_minutes?: number | null
           status?: string
+          summary?: string | null
           thumbnail_url?: string | null
           title?: string | null
           type?: string | null
@@ -126,11 +132,14 @@ export type Database = {
           highlights?: Json
           id?: string
           is_favorite?: boolean | null
+          key_points?: Json
           metadata?: Json | null
           notes?: string | null
           progress?: number
           queue_bucket?: string | null
+          reading_time_minutes?: number | null
           status?: string
+          summary?: string | null
           thumbnail_url?: string | null
           title?: string | null
           type?: string | null
