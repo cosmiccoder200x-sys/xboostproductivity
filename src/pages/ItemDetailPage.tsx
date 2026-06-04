@@ -124,6 +124,48 @@ export default function ItemDetailPage() {
           {item.description && <p className="mt-3 text-sm text-muted-foreground">{item.description}</p>}
         </div>
 
+        {/* AI Summary */}
+        <section className="bg-card rounded-xl border border-border p-4 space-y-3">
+          <div className="flex items-center justify-between">
+            <h2 className="text-sm font-semibold flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-primary" /> AI Summary
+            </h2>
+            <div className="flex items-center gap-3">
+              {item.reading_time_minutes != null && (
+                <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
+                  <Clock className="h-3 w-3" /> {item.reading_time_minutes} min read
+                </span>
+              )}
+              <Button size="sm" variant="ghost" onClick={runSummarize} disabled={summarizing}>
+                {summarizing ? <Loader2 className="h-4 w-4 animate-spin" /> : (item.summary ? 'Regenerate' : 'Generate')}
+              </Button>
+            </div>
+          </div>
+
+          {item.summary ? (
+            <p className="text-sm text-foreground leading-relaxed">{item.summary}</p>
+          ) : (
+            <p className="text-sm text-muted-foreground">
+              {summarizing ? 'Reading the page and summarizing…' : 'No summary yet. Tap Generate to create one.'}
+            </p>
+          )}
+
+          {item.key_points.length > 0 && (
+            <div className="pt-2 border-t border-border">
+              <h3 className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wide">Key points</h3>
+              <ul className="space-y-1.5">
+                {item.key_points.map((kp, i) => (
+                  <li key={i} className="text-sm text-foreground flex gap-2">
+                    <span className="text-primary mt-0.5">•</span>
+                    <span>{kp}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </section>
+
+
         {/* Progress & Status */}
         <section className="bg-card rounded-xl border border-border p-4 space-y-4">
           <div className="grid grid-cols-2 gap-3">
