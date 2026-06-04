@@ -60,6 +60,15 @@ export default function AddContentModal() {
 
   const handleSubmit = async () => {
     if (!url) return;
+
+    if (!isSafeHttpUrl(url)) {
+      toast({
+        title: 'Invalid URL',
+        description: 'Only http:// and https:// URLs are allowed.',
+        variant: 'destructive',
+      });
+      return;
+    }
     
     try {
       const domain = extractDomain(url);
