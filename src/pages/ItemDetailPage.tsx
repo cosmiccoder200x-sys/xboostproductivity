@@ -9,10 +9,12 @@ import { Slider } from '@/components/ui/slider';
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select';
-import { useItem, useItems, ItemStatus, QueueBucket, Highlight } from '@/hooks/useItems';
+import { useItem, useItems, ItemStatus, QueueBucket, Highlight, summarizeAndSaveItem } from '@/hooks/useItems';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { safeHref } from '@/lib/url';
+import { Sparkles, Clock, Loader2 } from 'lucide-react';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function ItemDetailPage() {
   const { id } = useParams<{ id: string }>();
