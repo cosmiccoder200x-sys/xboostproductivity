@@ -23,6 +23,7 @@ interface ItemCardProps {
   status?: ItemStatus;
   progress?: number;
   queue_bucket?: QueueBucket | null;
+  reading_time_minutes?: number | null;
   onToggleFavorite: (id: string, isFavorite: boolean) => void;
   onDelete?: (id: string) => void;
   onSetQueue?: (id: string, bucket: QueueBucket | null) => void;
