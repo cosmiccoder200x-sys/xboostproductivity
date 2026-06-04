@@ -8,9 +8,10 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useAddContentModal } from '@/hooks/useAddContentModal';
 import { useFolders } from '@/hooks/useFolders';
-import { useItems } from '@/hooks/useItems';
+import { useItems, summarizeAndSaveItem } from '@/hooks/useItems';
 import { useToast } from '@/hooks/use-toast';
 import { isSafeHttpUrl } from '@/lib/url';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function AddContentModal() {
   const { isOpen, closeModal } = useAddContentModal();
