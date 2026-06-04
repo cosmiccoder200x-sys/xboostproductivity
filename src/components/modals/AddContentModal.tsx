@@ -10,6 +10,7 @@ import { useAddContentModal } from '@/hooks/useAddContentModal';
 import { useFolders } from '@/hooks/useFolders';
 import { useItems } from '@/hooks/useItems';
 import { useToast } from '@/hooks/use-toast';
+import { isSafeHttpUrl } from '@/lib/url';
 
 export default function AddContentModal() {
   const { isOpen, closeModal } = useAddContentModal();
