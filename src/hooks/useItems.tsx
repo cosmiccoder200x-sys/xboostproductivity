@@ -30,6 +30,9 @@ export interface Item {
   progress: number;
   completed_at: string | null;
   highlights: Highlight[];
+  summary: string | null;
+  key_points: string[];
+  reading_time_minutes: number | null;
 }
 
 interface CreateItemInput {
