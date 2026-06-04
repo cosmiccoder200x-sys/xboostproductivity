@@ -12,6 +12,7 @@ import {
 import { useItem, useItems, ItemStatus, QueueBucket, Highlight } from '@/hooks/useItems';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import { safeHref } from '@/lib/url';
 
 export default function ItemDetailPage() {
   const { id } = useParams<{ id: string }>();
