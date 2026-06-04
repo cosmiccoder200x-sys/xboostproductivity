@@ -10,6 +10,7 @@ import {
   DropdownMenuLabel,
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
+import { safeHref } from '@/lib/url';
 import { QueueBucket, ItemStatus } from '@/hooks/useItems';
 
 interface ItemCardProps {
